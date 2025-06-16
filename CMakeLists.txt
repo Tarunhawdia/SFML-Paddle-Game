@@ -12,7 +12,9 @@ add_executable(SFMLGame main.cpp
         src/Ball.cpp
         src/Ball.h
         src/Paddle.cpp
-        src/Paddle.h)
+        src/Paddle.h
+        src/Scorecard.cpp
+        src/Scorecard.h)
 
 target_link_libraries(SFMLGame
         sfml-system

@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "src/Ball.h"
 #include "src/Paddle.h"
+#include "src/Scorecard.h"
 
 int main() {
     const float windowWidth = 800;
@@ -20,6 +21,8 @@ int main() {
 
     Ball ball(10.f, windowWidth / 2, windowHeight / 2);
     Paddle paddle(100.f, 20.f, windowWidth / 2 - 50, windowHeight - 40);
+    Scorecard scorecard;
+
 
     bool isGameOver = false;
 
@@ -31,6 +34,7 @@ int main() {
 
             if (isGameOver && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
                 // Reset game
+                scorecard.reset();
                 ball = Ball(10.f, windowWidth / 2, windowHeight / 2);
                 paddle = Paddle(100.f, 20.f, windowWidth / 2 - 50, windowHeight - 40);
                 isGameOver = false;
@@ -52,6 +56,7 @@ int main() {
             // Collision with paddle
             if (ball.getBounds().intersects(paddle.getBounds())) {
                 ball.bounceY();
+                scorecard.increment();
             }
 
             // Ball missed the paddle
@@ -63,10 +68,12 @@ int main() {
         window.clear(sf::Color::Black);
 
         if (isGameOver) {
+            scorecard.draw(window);
             window.draw(gameOverText);
         } else {
             ball.draw(window);
             paddle.draw(window);
+            scorecard.draw(window);
         }
 
         window.display();
