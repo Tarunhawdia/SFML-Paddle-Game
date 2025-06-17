@@ -4,6 +4,8 @@
 
 #include "Ball.h"
 
+#include <utility>
+
 Ball::Ball(float radius, float startX, float startY)
     : shape(radius), velocity(4.f, 4.f)
 {
@@ -38,6 +40,11 @@ void Ball::bounceX() {
 
 void Ball::bounceY() {
     velocity.y = -velocity.y;
+}
+
+void Ball::incrementVelocity(float x, float y) {
+    velocity.x +=x;
+    velocity.y += y;
 }
 
 sf::FloatRect Ball::getBounds() const {
