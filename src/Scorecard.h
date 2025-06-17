@@ -19,6 +19,7 @@ public:
     void increment(int point=1);
     void reset();
     void draw(sf::RenderWindow &window) const;
+    int getScore() const;
 
 private:
     int score;

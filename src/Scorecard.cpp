@@ -30,6 +30,10 @@ void Scorecard::reset() {
     updateText();
 }
 
+int Scorecard::getScore() const {
+    return score;
+}
+
 void Scorecard::draw(sf::RenderWindow& window) const {
     window.draw(text);
 }

@@ -4,8 +4,8 @@
 #include "src/Scorecard.h"
 
 int main() {
-    const float windowWidth = 800;
-    const float windowHeight = 600;
+    constexpr float windowWidth = 800;
+    constexpr float windowHeight = 600;
 
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Bouncing Ball Game");
     window.setFramerateLimit(60);
@@ -25,6 +25,7 @@ int main() {
 
 
     bool isGameOver = false;
+    bool collisionHappened = false;
 
     while (window.isOpen()) {
         sf::Event event{};
@@ -55,8 +56,16 @@ int main() {
 
             // Collision with paddle
             if (ball.getBounds().intersects(paddle.getBounds())) {
-                ball.bounceY();
-                scorecard.increment();
+                if (!collisionHappened) {
+                    ball.bounceY();
+                    float speedBoost = 0.05f * scorecard.getScore();
+                    ball.incrementVelocity(speedBoost, speedBoost);
+                    scorecard.increment();
+                    collisionHappened = true;
+                }
+            }
+            else {
+                collisionHappened = false;
             }
 
             // Ball missed the paddle
