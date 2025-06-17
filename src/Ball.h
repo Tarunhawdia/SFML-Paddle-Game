@@ -18,12 +18,14 @@ public:
     void bounceX();
     void bounceY();
 
+    void incrementVelocity(float x, float y);
+
+
     sf::FloatRect getBounds() const;
 
 private:
     sf::CircleShape shape;
     sf::Vector2f velocity;
-
 };
 
 

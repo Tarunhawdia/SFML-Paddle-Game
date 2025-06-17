@@ -5,7 +5,7 @@
 #include "Paddle.h"
 
 Paddle::Paddle(float width, float height, float startX, float startY)
-    :speed(4.5f)
+    :speed(10.5f)
     ,direction(0)
 {
     shape.setSize({width,height});
