@@ -54,17 +54,17 @@ int main() {
             ball.update(windowWidth, windowHeight);
             paddle.update(windowWidth);
 
-            // Collision with paddle
             if (ball.getBounds().intersects(paddle.getBounds())) {
-                float ballBottom= ball.getBounds().top+ball.getBounds().height;
-                float paddleTop=paddle.getBounds().top;
+                float ballBottom = ball.getBounds().top + ball.getBounds().height;
+                float paddleTop = paddle.getBounds().top;
 
-                if (ballBottom<paddleTop +10.0f) {
+                if (ballBottom < paddleTop + 10.0f) {
                     if (!collisionHappened) {
                         ball.bounceY();
-                        float speedBoost = 0.5f * scorecard.getScore();
-                        ball.incrementVelocity(speedBoost, speedBoost);
                         scorecard.increment();
+                        // Set speed: base speed + (score * increment)
+                        float newSpeed = 4.0f + static_cast<float>(scorecard.getScore()) * 0.7f;
+                        ball.setSpeed(newSpeed);
                         collisionHappened = true;
                     }
                 }

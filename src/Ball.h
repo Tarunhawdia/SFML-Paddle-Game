@@ -7,9 +7,10 @@
 
 #include <SFML/Graphics.hpp>
 
-class Ball {
+class Ball
+{
 public:
-    Ball(float radius,float startX,float startY);
+    Ball(float radius, float startX, float startY);
     ~Ball();
 
     void update(float windowWidth, float windowHeight);
@@ -19,7 +20,7 @@ public:
     void bounceY();
 
     void incrementVelocity(float x, float y);
-
+    void setSpeed(float speed);
 
     sf::FloatRect getBounds() const;
 
@@ -28,6 +29,4 @@ private:
     sf::Vector2f velocity;
 };
 
-
-
-#endif //BALL_H
+#endif // BALL_H

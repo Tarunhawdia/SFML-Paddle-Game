@@ -4,6 +4,8 @@
 
 #include "Ball.h"
 
+#include <cmath>
+
 #include <utility>
 
 Ball::Ball(float radius, float startX, float startY)
@@ -45,6 +47,12 @@ void Ball::bounceY() {
 void Ball::incrementVelocity(float x, float y) {
     velocity.x +=x;
     velocity.y += y;
+}
+
+void Ball::setSpeed(float speed) {
+    float angle = std::atan2(velocity.y, velocity.x);
+    velocity.x = speed * std::cos(angle);
+    velocity.y = speed * std::sin(angle);
 }
 
 sf::FloatRect Ball::getBounds() const {
