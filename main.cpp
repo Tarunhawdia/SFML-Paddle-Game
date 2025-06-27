@@ -3,6 +3,12 @@
 #include "src/Paddle.h"
 #include "src/Scorecard.h"
 
+enum class GameState {
+    Start,
+    Playing,
+    GameOver
+};
+
 int main() {
     constexpr float windowWidth = 800;
     constexpr float windowHeight = 600;
@@ -12,8 +18,12 @@ int main() {
 
     sf::Font font;
     if (!font.loadFromFile("/System/Library/Fonts/Supplemental/Arial.ttf")) {
-        return -1; // Use a valid system font path or bundle a font
+        return -1;
     }
+
+    sf::Text startText("Press any key to Start", font, 32);
+    startText.setFillColor(sf::Color::White);
+    startText.setPosition(windowWidth / 2 - 160, windowHeight / 2 - 50);
 
     sf::Text gameOverText("Game Over\nPress R to Restart", font, 32);
     gameOverText.setFillColor(sf::Color::Red);
@@ -23,8 +33,7 @@ int main() {
     Paddle paddle(100.f, 20.f, windowWidth / 2 - 50, windowHeight - 40);
     Scorecard scorecard;
 
-
-    bool isGameOver = false;
+    GameState gameState = GameState::Start;
     bool collisionHappened = false;
 
     while (window.isOpen()) {
@@ -33,17 +42,23 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            if (isGameOver && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
+            // Handle input based on game state
+            if (gameState == GameState::Start && event.type == sf::Event::KeyPressed){
+                gameState = GameState::Playing;
+            }
+
+            if (gameState == GameState::GameOver && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
                 // Reset game
                 scorecard.reset();
                 ball = Ball(10.f, windowWidth / 2, windowHeight / 2);
                 paddle = Paddle(100.f, 20.f, windowWidth / 2 - 50, windowHeight - 40);
-                isGameOver = false;
+                collisionHappened = false;
+                gameState = GameState::Start;
             }
         }
 
-        if (!isGameOver) {
-            // Paddle input
+        if (gameState == GameState::Playing) {
+            // Paddle control
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
                 paddle.moveLeft();
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -62,32 +77,32 @@ int main() {
                     if (!collisionHappened) {
                         ball.bounceY();
                         scorecard.increment();
-                        // Set speed: base speed + (score * increment)
                         float newSpeed = 4.0f + static_cast<float>(scorecard.getScore()) * 0.7f;
                         ball.setSpeed(newSpeed);
                         collisionHappened = true;
                     }
                 }
-            }
-            else {
+            } else {
                 collisionHappened = false;
             }
 
-            // Ball missed the paddle
             if (ball.getBounds().top > windowHeight) {
-                isGameOver = true;
+                gameState = GameState::GameOver;
             }
         }
 
+        // DRAW
         window.clear(sf::Color::Black);
 
-        if (isGameOver) {
-            scorecard.draw(window);
-            window.draw(gameOverText);
-        } else {
+        if (gameState == GameState::Start) {
+            window.draw(startText);
+        } else if (gameState == GameState::Playing) {
             ball.draw(window);
             paddle.draw(window);
             scorecard.draw(window);
+        } else if (gameState == GameState::GameOver) {
+            scorecard.draw(window);
+            window.draw(gameOverText);
         }
 
         window.display();
