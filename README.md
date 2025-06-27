@@ -54,6 +54,7 @@ cmake --build build
 | ← / →       | Move Paddle          |
 | R           | Restart on Game Over |
 | Esc / Close | Exit Game            |
+| Any Key     | Start Game           |
 
 
 📁 Project Structure
